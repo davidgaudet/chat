@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d71dd44749ba3e9f7e7178e8c631ff0c",
+    "revision": "650c5f837bbcf2c984ce9fff5263476f",
     "url": "/chat/index.html"
   },
   {
-    "revision": "fb645dc3637a9d7d756d",
-    "url": "/chat/static/css/main.5f361e03.chunk.css"
+    "revision": "d2811e22b7ca46958c9c",
+    "url": "/chat/static/css/main.523f09c5.chunk.css"
   },
   {
     "revision": "bc04c3b1243170f018a4",
@@ -16,15 +16,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/chat/static/js/2.1ac19246.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "fb645dc3637a9d7d756d",
-    "url": "/chat/static/js/main.a24978ef.chunk.js"
+    "revision": "d2811e22b7ca46958c9c",
+    "url": "/chat/static/js/main.98d95c77.chunk.js"
   },
   {
     "revision": "8d86be0bcc4812848edd",
     "url": "/chat/static/js/runtime-main.6b736942.js"
   },
   {
-    "revision": "5d5d9eefa31e5e13a6610d9fa7a283bb",
-    "url": "/chat/static/media/logo.5d5d9eef.svg"
+    "revision": "ee7cd8ed2dcec943251eb2763684fc6f",
+    "url": "/chat/static/media/logo.ee7cd8ed.svg"
   }
 ]);
