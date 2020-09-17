@@ -1,7 +1,6 @@
 {
-  "name": {
-    "homepage": "https://davidgaudet.github.io/ChatterMap/"
-  },
+  "homepage": "https://davidgaudet.github.io/ChatterMap/",
+  "name": "ChatterMap",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
