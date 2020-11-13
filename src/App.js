@@ -8,96 +8,43 @@ import './App.css';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import randomColor from 'randomcolor';
 
-/*
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome to Chat Map. Message strangers around the world.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          .
-        </a>
-      </header>
-      <Button variant="contained">Default</Button>
-      <Map />	  
-    </div>
-  );
-}
-*/
+//<Grid item xs={6}>
+ //       <div style={{background:randomColor()}}>Hooray something is here!</div>
+ //     </Grid>
+class App extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      rounds_completed: 0,
+      rounds_remaining: 0
+    };
+  }
+  
+  render() {
+    const CenteredGrid = ({rCompleted, rRemaining}) => (
+      <div>
 
-function App() {
-  return (
-    <div className="App">
-      <Top />
-      
-      <CenteredGrid />
-    </div>
-  );
-}
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    
-  },
-  roundStatusCard: {
-    backgroundColor:"lightskyblue"
-  },
-  memberStatusCard: {
-    backgroundColor:"mediumpurple"
-  },
-  meetingRowCard: {
-    margin: "6px",
-    backgroundColor:"white"
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-}));
-
-function CenteredGrid() {
-  const classes = useStyles();
-
-  return (
-    <div>
-      <Grid container spacing={10} direction="column" justify="center" alignItems="center">
-        
-        <Grid container item direction="row" justify="space-around" alignItems="stretch">
-          <Grid item component={Card} className={classes.roundStatusCard}>
+        <Grid container justify="space-evenly" alignItems="stretch" style={{padding: '24px'}}>
+          <Grid item xs={3} component={Card} className={useStyles().roundStatusCard} variant="outlined">
             <CardContent>
               <Typography variant="body2" component="p">
-                Rounds Completed: 0
+                Rounds Completed: {rCompleted}
                 <br />
-                Rounds Remaining: 0
+                Rounds Remaining: {rRemaining}
               </Typography>
             </CardContent>
           </Grid>
-          <Grid item component={Card} className={classes.memberStatusCard}>
+          <Grid item xs={3} component={Card} className={useStyles().memberStatusCard} variant="outlined">
             <CardContent>
               <Typography variant="body2" component="p">
                 New Members
               </Typography>
             </CardContent>
           </Grid>
-          <Grid item component={Card} className={classes.memberStatusCard}>
+          <Grid item xs={3} component={Card} className={useStyles().memberStatusCard} variant="outlined">
             <CardContent>
               <Typography variant="body2" component="p">
                 Existing Members
@@ -105,35 +52,45 @@ function CenteredGrid() {
             </CardContent>
           </Grid>
         </Grid>
-      
-
-        <Grid container item direction="column" justify="space-evenly" alignItems="center">
-          <Grid item component={Card} className={classes.meetingRowCard}>
-            <CardContent>
-              <Typography variant="body2" component="p">
-                O O O O O O O O O
-              </Typography>
-            </CardContent>
-          </Grid>
-          <Grid item component={Card} className={classes.meetingRowCard}>
-            <CardContent>
-              <Typography variant="body2" component="p">
-                O O O O O O O O O
-              </Typography>
-            </CardContent>
-          </Grid>
-        </Grid>
-      
+    
         <Grid container item justify="center" alignItems="center">
-          <Grid>
-            <Button variant="contained" style={{backgroundColor: "lightgreen", margin: "10px"}} >
+          <Grid item>
+            <Button onClick={() => { this.setState({rounds_completed: rCompleted+1})}}
+              variant="outlined" style={{backgroundColor: "#82E0AA", margin: "10px"}} >
               Start Round
             </Button>
           </Grid>
         </Grid>
+    
+      </div>
+    );
 
-      </Grid>
-    </div>
-  );
+    return(
+      <div className="App">
+        <Top />
+        <CenteredGrid rCompleted={this.state.rounds_completed} rRemaining={this.state.rounds_remaining}/>
+      </div>
+    );
+  }
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    
+  },
+  roundStatusCard: {
+    backgroundColor:"#8DC6F6",
+    border: "1px solid black"
+  },
+  memberStatusCard: {
+    backgroundColor:"#D19BE8",
+    border: "1px solid black"
+  },
+  meetingRowCard: {
+    margin: "6px",
+    border: "1px solid black",
+    backgroundColor:"white"
+  },
+}));
+
 export default App;
