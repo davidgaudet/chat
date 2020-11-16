@@ -34,6 +34,14 @@ class App extends React.Component {
         pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
         dateJoined: "date"
       }],
+      ext_member_data: [{
+        first:"Boss",
+        last:"User",
+        role:"Manager",
+        forms:"",
+        pic:"https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop",
+        dateJoined: "date"
+      }],
       ext_members: [1]
     };
   }
@@ -67,7 +75,7 @@ class App extends React.Component {
     var ext_avatars = [];
     for (var i = 0; i < this.state.ext_members.length; i++) {
       ext_avatars.push(
-        <Avatar>{this.state.ext_members[i]}</Avatar>
+        <Avatar alt={this.state.ext_member_data[i].first[0]} src={this.state.ext_member_data[i].pic}></Avatar>
       );
     }
 
@@ -88,7 +96,7 @@ class App extends React.Component {
             <CardHeader
               action={
 
-                  <SimpleModal/>
+                  <SimpleModal isNewMember={true}/>
               }
               title={
                 <Typography variant="body2" component="p">
@@ -106,14 +114,7 @@ class App extends React.Component {
           <Grid item xs={3} component={Card} className={useStyles().memberStatusCard} variant="outlined">
             <CardHeader
               action={
-                <Fab size="small" onClick={() => {
-                  let extMembers = this.state.ext_members;
-                  let last = extMembers[extMembers.length-1];
-                  extMembers.push(last+2);
-                  this.setState({ext_members: extMembers})}
-                }>
-                  <AddIcon/>
-                </Fab>
+                  <SimpleModal/>
               }
               title={
                 <Typography variant="body2" component="p">
@@ -197,6 +198,43 @@ class App extends React.Component {
       );
     }
 
+    function BasicTextFieldsForExisting() {
+
+      const classes = useStyles();
+      return (
+        <form className={classes.root} noValidate autoComplete="off">
+          <TextField required id="standard-required" className="new-member-first" label="Required" helperText="First Name" placeholder="First Name"/>
+          <TextField required  id="standard-required" className="new-member-last" label="Required" helperText="Last Name" placeholder="Last Name"/>
+          <TextField className="new-member-role" id="standard-basic" label="" helperText="Team Role"   placeholder="Team Role"/>
+          <TextField
+          className="new-member-forms"
+              id="standard-full-width"
+              style={{ margin: 8 }}
+              placeholder="Enter Link"
+              helperText="Google Forms Link"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+            className="new-member-pic"
+                id="standard-full-width"
+                style={{ margin: 8 }}
+                placeholder="Enter Link"
+                helperText="Profile Picture Link"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+        </form>
+
+      );
+    }
+
     function DatePickers() {
       const classes = useStyles();
       return (
@@ -216,7 +254,7 @@ class App extends React.Component {
       );
     }
 
-    const SimpleModal= () => {
+    const SimpleModal= ({isNewMember}) => {
       const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
@@ -274,6 +312,49 @@ class App extends React.Component {
 
     };
 
+    const addExistingAndClose = () => {
+
+
+      var first = document.querySelectorAll("#standard-required")[0].value;
+      var lastN = document.querySelectorAll("#standard-required")[1].value;
+      var role = document.getElementById("standard-basic").value;
+      var forms = document.querySelectorAll("#standard-full-width")[0].value;
+      var pic = document.querySelectorAll("#standard-full-width")[1].value;
+      var date = document.getElementById("date").value;
+      if(first.trim() != "" && lastN.trim() != ""){
+       console.log(first, lastN, role, forms, pic, date);
+       if(pic.trim() == ""){
+         pic = "invalid";
+       }
+       var existingMemberToAdd = {
+         "first":first,
+         "last":lastN,
+         "role":role,
+         "forms":forms,
+         "pic":pic,
+         "dateJoined": date
+       };
+       let extMembers = this.state.ext_members;
+      let last = extMembers[extMembers.length-1];
+      extMembers.push(last+2);
+      this.setState({ext_members: extMembers});
+
+          let extMemberData = this.state.ext_member_data;
+          extMemberData.push(existingMemberToAdd);
+          this.setState({ext_member_data: extMemberData});
+              setOpen(false);
+        }
+        else{
+          if(first.trim() == "" && lastN.trim() == "")
+            alert("First and last name required");
+          else if(first.trim() == "")
+              alert("First name required");
+          else if(lastN.trim() == "")
+                alert("Last name required");
+        }
+
+    };
+
     const body = (
       <div style={modalStyle} className={classes.paper}>
         <h2 id="simple-modal-title">New Teammember Form</h2>
@@ -288,6 +369,22 @@ class App extends React.Component {
 
       </div>
     );
+
+    const body_for_existing = (
+      <div style={modalStyle} className={classes.paper}>
+        <h2 id="simple-modal-title">Existing Team Member Form</h2>
+        <p id="simple-modal-description">
+          Add your exisiting team member to Meeter.
+        </p>
+        <BasicTextFieldsForExisting/>
+        <DatePickers/>
+        <button type="button" onClick={addExistingAndClose}>
+        Add User
+        </button>
+
+      </div>
+    );
+    if(isNewMember){
       return(
         <div>
         <Fab size="small" onClick={() => {handleOpen();
@@ -306,6 +403,27 @@ class App extends React.Component {
         </div>
       );
     }
+    else{
+      return (
+        <div>
+        <Fab size="small" onClick={() => {handleOpen();
+
+        }
+        }>
+          <AddIcon/>
+        </Fab>
+        <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description">
+      {body_for_existing}
+    </Modal>
+        </div>
+      );
+    }
+    }
+
 
 
     return(
