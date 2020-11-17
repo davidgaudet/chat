@@ -16,7 +16,8 @@ import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
-
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
 
 class App extends React.Component {
 
@@ -32,7 +33,9 @@ class App extends React.Component {
         role:"Intern",
         forms:"",
         pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
-        dateJoined: "date"
+        dateJoined: "date",
+        currentMatch: 0,
+        id: 0
       }],
       ext_member_data: [{
         first:"Boss",
@@ -40,14 +43,75 @@ class App extends React.Component {
         role:"Manager",
         forms:"",
         pic:"https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop",
-        dateJoined: "date"
+        dateJoined: "date",
+        currentMatch: 0,
+        id: 0
       }],
-      ext_members: [1]
+      ext_members: [1],
+      modalStyle:"",
+      open: false,
+      setOpen: false
+
+
     };
   }
 
 
   render() {
+
+
+  function MeeterModal({name, pic, matchName, matchPic}) {
+  const classes = useStyles();
+  // getModalStyle is not a pure function, we roll the style only on the first render
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const body = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id="simple-modal-title">Meeter Match!</h2>
+      <p id="simple-modal-description">
+        Match Meeting Details.
+
+      </p>
+      <AvatarGroup>
+      <Avatar alt={name[0]} src={pic} className={classes.large}></Avatar>
+      <Avatar alt={matchName} src={matchPic} className={classes.large} height="1000"></Avatar>
+
+      </AvatarGroup>
+      <p>
+      {name} + {matchName}
+      </p>
+
+
+    </div>
+  );
+
+  return (
+    <div>
+    <Fab size="small" onClick={() => {handleOpen();}}>
+      <Avatar alt={name} src={pic}></Avatar>
+      </Fab>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+
+        {body}
+      </Modal>
+    </div>
+  );
+}
+
     var meetingRows = [];
 
     var new_avatars = [];
@@ -67,15 +131,21 @@ class App extends React.Component {
           </Card>
         </Grid>
       );
+      let matchee = this.state.new_member_data[i];
+      let match = this.state.ext_member_data[matchee.currentMatch];
+      console.log(match);
       new_avatars.push(
-        <Avatar alt={this.state.new_member_data[i].first[0]} src={this.state.new_member_data[i].pic}></Avatar>
+      <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
       );
     }
 
     var ext_avatars = [];
+
     for (var i = 0; i < this.state.ext_members.length; i++) {
+      let matchee = this.state.ext_member_data[i];
+      let match = this.state.new_member_data[matchee.currentMatch];
       ext_avatars.push(
-        <Avatar alt={this.state.ext_member_data[i].first[0]} src={this.state.ext_member_data[i].pic}></Avatar>
+            <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
       );
     }
 
@@ -90,6 +160,7 @@ class App extends React.Component {
                 <br />
                 Rounds Remaining: {rRemaining}
               </Typography>
+
             </CardContent>
           </Grid>
           <Grid item xs={3} component={Card} className={useStyles().memberStatusCard} variant="outlined">
@@ -289,7 +360,9 @@ class App extends React.Component {
          "role":role,
          "forms":forms,
          "pic":pic,
-         "dateJoined": date
+         "dateJoined": date,
+         "currentMatch": 0,
+         "id": this.state.new_members.length-1
        };
        let newMembers = this.state.new_members;
          let last = newMembers[newMembers.length-1];
@@ -332,7 +405,9 @@ class App extends React.Component {
          "role":role,
          "forms":forms,
          "pic":pic,
-         "dateJoined": date
+         "dateJoined": date,
+         "currentMatch": 0,
+         "id": this.state.new_members.length-1
        };
        let extMembers = this.state.ext_members;
       let last = extMembers[extMembers.length-1];
@@ -426,6 +501,9 @@ class App extends React.Component {
 
 
 
+
+
+
     return(
       <div className="App">
         <Top />
@@ -491,6 +569,10 @@ const useStyles = makeStyles((theme) => ({
    marginLeft: theme.spacing(1),
    marginRight: theme.spacing(1),
    width: 200,
+ },
+ large: {
+   width: theme.spacing(15),
+   height: theme.spacing(15),
  }
 }));
 
