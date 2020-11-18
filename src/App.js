@@ -24,9 +24,11 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      active_round: false,
       rounds_completed: 0,
       rounds_remaining: 0,
       new_members: [0],
+      ext_members: [1],
       new_member_data: [{
         first:"Sample",
         last:"User",
@@ -47,7 +49,6 @@ class App extends React.Component {
         currentMatch: 0,
         id: 0
       }],
-      ext_members: [1],
       modalStyle:"",
       open: false,
       setOpen: false
@@ -58,85 +59,106 @@ class App extends React.Component {
 
 
   render() {
+    function MeeterModal({name, pic, matchName, matchPic}) {
+      const classes = useStyles();
+      // getModalStyle is not a pure function, we roll the style only on the first render
+      const [modalStyle] = React.useState(getModalStyle);
+      const [open, setOpen] = React.useState(false);
 
+      const handleOpen = () => {
+        setOpen(true);
+      };
 
-  function MeeterModal({name, pic, matchName, matchPic}) {
-  const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+      const handleClose = () => {
+        setOpen(false);
+      };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+      const body = (
+        <div style={modalStyle} className={classes.paper}>
+          <h2 id="simple-modal-title">Meeter Match!</h2>
+          <p id="simple-modal-description">
+            Match Meeting Details.
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+          </p>
+          <AvatarGroup>
+            <Avatar alt={name[0]} src={pic} className={classes.large}></Avatar>
+            <Avatar alt={matchName} src={matchPic} className={classes.large} height="1000"></Avatar>
+          </AvatarGroup>
+          <p>
+            {name} + {matchName}
+          </p>
+        </div>
+      );
 
-  const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Meeter Match!</h2>
-      <p id="simple-modal-description">
-        Match Meeting Details.
-
-      </p>
-      <AvatarGroup>
-      <Avatar alt={name[0]} src={pic} className={classes.large}></Avatar>
-      <Avatar alt={matchName} src={matchPic} className={classes.large} height="1000"></Avatar>
-
-      </AvatarGroup>
-      <p>
-      {name} + {matchName}
-      </p>
-
-
-    </div>
-  );
-
-  return (
-    <div>
-    <Fab size="small" onClick={() => {handleOpen();}}>
-      <Avatar alt={name} src={pic}></Avatar>
-      </Fab>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-
-        {body}
-      </Modal>
-    </div>
-  );
-}
-
-    var meetingRows = [];
+      return (
+        <div>
+          <Fab size="small" onClick={() => {handleOpen();}}>
+            <Avatar alt={name} src={pic}></Avatar>
+          </Fab>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            {body}
+          </Modal>
+        </div>
+      );
+    }
+    this.state.rounds_remaining = this.state.new_members.length + this.state.ext_members.length - (1 + this.state.rounds_completed);
+    var meeting_past = [];
+    var meetingMembers = [];
+    var meeting_future = [];
 
     var new_avatars = [];
     for (var i = 0; i < this.state.new_members.length; i++) {
-      var circleString = "";
-      for (var j = 0; j < this.state.new_members.length + this.state.ext_members.length - 1; j++) {
-        circleString += " O   ";
+      var previousCircleString = "";
+      var remainingCircleString = "";
+      for (var j = 0; j < this.state.rounds_completed; j++) {
+        previousCircleString += " O   ";
       }
-      meetingRows.push(
-        <Grid item>
-          <Card className="roundStatusCard" variant="outlined">
-          <CardContent>
-            <Typography variant="body2" component="p">
-              {circleString}
-            </Typography>
-          </CardContent>
-          </Card>
-        </Grid>
-      );
+      for (var j = 0; j < this.state.new_members.length + this.state.ext_members.length - (1 + this.state.rounds_completed); j++) {
+        remainingCircleString += " O   ";
+      }
       let matchee = this.state.new_member_data[i];
       let match = this.state.ext_member_data[matchee.currentMatch];
       console.log(match);
       new_avatars.push(
-      <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
+        <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
       );
+
+      if (this.state.rounds_completed != 0) {
+        meeting_past.push(
+          <Grid item>
+            <Card className="roundStatusCard" variant="outlined">
+            <CardContent>
+              <Typography variant="body2" component="p">
+                {previousCircleString}
+              </Typography>
+            </CardContent>
+            </Card>
+          </Grid>
+        );
+      }
+      meetingMembers.push(
+        <Grid item spacing={2}>
+        <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
+        </Grid>
+      );
+      if (this.state.rounds_remaining != 0) {
+        meeting_future.push(
+          <Grid item>
+            <Card className="roundStatusCard" variant="outlined">
+            <CardContent>
+              <Typography variant="body2" component="p">
+                {remainingCircleString}
+              </Typography>
+            </CardContent>
+            </Card>
+          </Grid>
+        );
+      }
     }
 
     var ext_avatars = [];
@@ -153,6 +175,7 @@ class App extends React.Component {
       <div>
 
         <Grid container justify="space-evenly" alignItems="stretch" style={{padding: '24px'}}>
+          
           <Grid item xs={3} component={Card} className={useStyles().roundStatusCard} variant="outlined">
             <CardContent>
               <Typography variant="body2" component="p">
@@ -160,14 +183,12 @@ class App extends React.Component {
                 <br />
                 Rounds Remaining: {rRemaining}
               </Typography>
-
             </CardContent>
           </Grid>
           <Grid item xs={3} component={Card} className={useStyles().memberStatusCard} variant="outlined">
             <CardHeader
               action={
-
-                  <SimpleModal isNewMember={true}/>
+                <SimpleModal isNewMember={true}/>
               }
               title={
                 <Typography variant="body2" component="p">
@@ -175,7 +196,6 @@ class App extends React.Component {
                 </Typography>
               }
             />
-
             <CardContent>
               <AvatarGroup>
                 {new_avatars}
@@ -201,16 +221,36 @@ class App extends React.Component {
           </Grid>
         </Grid>
 
-        <Grid container spacing={1} direction="column" justify="center" alignItems="center">
-          {meetingRows}
-        </Grid>
+        <Grid container spacing={2} direction="row" justify="center" alignItems="stretch">
+          <Grid container item xs={2} spacing={1} direction="column" justify="center" alignItems="flex-end">
+            {meeting_past}
+          </Grid>
+          <Card className="roundStatusCard" variant="outlined">
+            <CardContent>
+              <Grid container spacing={4} direction="column" justify="center">
+                {meetingMembers}
+              </Grid>
+            </CardContent>
+          </Card>
+          <Grid container item xs={2} spacing={1} direction="column" justify="center" alignItems="flex-start">
+            {meeting_future}
+          </Grid>
+        </Grid> 
 
         <Grid container item justify="center" alignItems="center">
           <Grid item>
-            <Button onClick={() => { this.setState({rounds_completed: rCompleted+1})}}
-              variant="outlined" style={{backgroundColor: "#82E0AA", margin: "10px"}} >
-              Start Round
-            </Button>
+            { this.state.active_round == false && 
+              <Button onClick={() => { this.setState({active_round: !this.state.active_round})}}
+                variant="outlined" style={{backgroundColor: "#82E0AA", margin: "20px"}} >
+                Start Round
+              </Button>
+            }
+            { this.state.active_round == true && 
+              <Button onClick={() => { this.setState({active_round: !this.state.active_round, rounds_completed: rCompleted+1})}}
+                variant="outlined" style={{backgroundColor: "#f5d36e", margin: "20px"}} >
+                Finish Round
+              </Button>
+            }
           </Grid>
         </Grid>
 
