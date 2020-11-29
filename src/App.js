@@ -18,8 +18,135 @@ import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+
+let newMemberCount = 0;
+let extMemberCount = 0;
+
+let demo_frame_count = 0;
+let demo_prev_round_info = [[], [], []];
+let demo_round_info = [
+  [[2, 3, 4, 1], 
+   [3, 4, 2, 0]],
+  [[3, 5, 4, 1],
+   [4, 2, 5, 0],
+   [2, 0, 1, 3, 4]],
+];
+let demo_all_data = [{
+  first:"Sample",
+  last:"User",
+  role:"Intern",
+  forms:"",
+  pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 0
+},
+{
+  first:"Puppy 2",
+  last:"User",
+  role:"Intern",
+  forms:"",
+  pic:"https://www.firstforwomen.com/wp-content/uploads/sites/2/2019/07/puppy-eyes.jpg?resize=715,536",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 1
+},
+{
+  first:"Boss",
+  last:"User",
+  role:"Manager",
+  forms:"",
+  pic:"https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 2
+},
+{
+  first:"Cat",
+  role:"Manager",
+  forms:"",
+  pic:"https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 3
+},
+{
+  first:"Tan cat",
+  last:"User",
+  role:"Manager",
+  forms:"",
+  pic:"https://www.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.ngsversion.1526587209178.adapt.1900.1.jpg",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 4
+},
+{
+  first:"Puppy 3",
+  last:"User",
+  role:"Intern",
+  forms:"",
+  pic:"https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half/public/field_blog_entry_images/2018-03/puppy-tips.jpg?itok=dp_MoapS",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 5
+}];
+
+let demo_new_member_data = [{
+  first:"Sample",
+  last:"User",
+  role:"Intern",
+  forms:"",
+  pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 0
+},
+{
+  first:"Puppy 2",
+  last:"User",
+  role:"Intern",
+  forms:"",
+  pic:"https://www.firstforwomen.com/wp-content/uploads/sites/2/2019/07/puppy-eyes.jpg?resize=715,536",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 1
+}];
+
+let demo_ext_member_data = [
+  {
+  first:"Boss",
+  last:"User",
+  role:"Manager",
+  forms:"",
+  pic:"https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 0
+},
+{
+  first:"Cat",
+  last:"User",
+  role:"Manager",
+  forms:"",
+  pic:"https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 1
+},
+{
+  first:"Tan cat",
+  last:"User",
+  role:"Manager",
+  forms:"",
+  pic:"https://www.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.ngsversion.1526587209178.adapt.1900.1.jpg",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 1
+}];
 
 class App extends React.Component {
+  
 
   constructor(props) {
     super(props)
@@ -28,7 +155,9 @@ class App extends React.Component {
       rounds_completed: 0,
       rounds_remaining: 0,
       new_members: [0],
-      ext_members: [1],
+      ext_members: [0],
+      prev_meetings: [],
+      next_meetings: [],
       new_member_data: [{
         first:"Sample",
         last:"User",
@@ -51,9 +180,9 @@ class App extends React.Component {
       }],
       modalStyle:"",
       open: false,
-      setOpen: false
-
-
+      setOpen: false,
+      demo: false,
+      demoRound: 0
     };
   }
 
@@ -91,7 +220,7 @@ class App extends React.Component {
       );
 
       return (
-        <div>
+        <div style={{paddingLeft: 2, paddingRight: 2}}>
           <Fab size="small" onClick={() => {handleOpen();}}>
             <Avatar alt={name} src={pic}></Avatar>
           </Fab>
@@ -106,13 +235,26 @@ class App extends React.Component {
         </div>
       );
     }
-    this.state.rounds_remaining = this.state.new_members.length + this.state.ext_members.length - (1 + this.state.rounds_completed);
+    if (newMemberCount != this.state.new_members.length) {
+      console.log("new new member");
+      newMemberCount = this.state.new_members.length;
+    }
+    if (extMemberCount != this.state.ext_members.length) {
+      console.log("new ext member");
+      extMemberCount = this.state.ext_members.length;
+    }
+    if (this.state.demo && this.state.new_member_data.length == 3) {
+      this.state.new_member_data[2].pic = "https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half/public/field_blog_entry_images/2018-03/puppy-tips.jpg?itok=dp_MoapS";
+    }
+    
+    if (!this.state.demo) this.state.rounds_remaining = this.state.new_members.length + this.state.ext_members.length - (1 + this.state.rounds_completed);
+    else if (this.state.rounds_completed == 1) this.state.rounds_remaining = 3;
     var meeting_past = [];
     var meetingMembers = [];
     var meeting_future = [];
 
     var new_avatars = [];
-    for (var i = 0; i < this.state.new_members.length; i++) {
+    for (var i = 0; i < this.state.new_member_data.length; i++) {
       var previousCircleString = "";
       var remainingCircleString = "";
       for (var j = 0; j < this.state.rounds_completed; j++) {
@@ -141,9 +283,13 @@ class App extends React.Component {
           </Grid>
         );
       }
+      let avatar_padding = 0;
+      if (this.state.demo) avatar_padding = 10;
       meetingMembers.push(
-        <Grid item spacing={2}>
+        <Grid item>
+        <div style={{ paddingTop: avatar_padding }}>
         <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
+        </div>
         </Grid>
       );
       if (this.state.rounds_remaining != 0) {
@@ -163,14 +309,148 @@ class App extends React.Component {
 
     var ext_avatars = [];
 
-    for (var i = 0; i < this.state.ext_members.length; i++) {
+    for (var i = 0; i < this.state.ext_member_data.length; i++) {
       let matchee = this.state.ext_member_data[i];
       let match = this.state.new_member_data[matchee.currentMatch];
       ext_avatars.push(
             <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
       );
     }
+    
+    if (this.state.demo) {
+      if (this.state.new_member_data.length == 2) {
+          meeting_future = [];
+          if (this.state.rounds_completed == 1 && demo_prev_round_info[0].length == 0) {
+            meeting_past = [];
+            for (var i = 0; i < 2; i++) {
+              demo_prev_round_info[i].push(demo_round_info[0][i].shift());
+            }
 
+            
+            for (var i = 0; i < 2; i++) {
+              let previous_meetings = [];
+              for (var j = 0; j < demo_prev_round_info[i].length; j++) {
+                let match = demo_all_data[demo_prev_round_info[i][j]];
+                previous_meetings.push(
+                  <Grid item>
+                    <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                  </Grid>
+                );
+              }
+              meeting_past.push(
+                <Grid item>
+                  <Card className="roundStatusCard" variant="outlined">
+                  <CardContent>
+                    <Typography variant="body2" component="p">
+                      <Grid container direction="row">
+                        {previous_meetings}
+                      </Grid>
+                    </Typography>
+                  </CardContent>
+                  </Card>
+                </Grid>
+              );
+            }
+          } else {
+            this.state.rounds_remaining = 4;
+            meeting_past = [];
+            meeting_future = [];
+          }
+          
+          for (var i = 0; i < 2; i++) { 
+            let future_meetings = [];
+            for (var j = 0; j < demo_round_info[0][i].length; j++) {
+                let match = demo_all_data[demo_round_info[0][i][j]];
+                future_meetings.push(
+                <Grid item>
+                  <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                </Grid>
+                );
+            }
+            meeting_future.push(
+              <Grid item>
+                <Card className="roundStatusCard" variant="outlined">
+                <CardContent>
+                  <Typography variant="body2" component="p">
+                    <Grid container direction="row">
+                      {future_meetings}
+                    </Grid>
+                  </Typography>
+                </CardContent>
+                </Card>
+              </Grid>
+            );
+          }
+      } else if (this.state.new_member_data.length == 3) {
+          this.state.rounds_remaining = 6-this.state.rounds_completed;
+          meeting_past = [];
+
+          if (this.state.rounds_completed == 6) {
+            demo_prev_round_info[2].push(demo_round_info[1][2].shift());
+          }
+          else if (this.state.rounds_completed > 1 && this.state.rounds_completed != demo_frame_count) {
+            for (var i = 0; i < 3; i++) {
+              demo_prev_round_info[i].push(demo_round_info[1][i].shift());
+            }
+          } 
+
+          for (var i = 0; i < 3; i++) {
+            if (i == 2 && this.state.rounds_completed == 1) continue;
+            let previous_meetings = [];
+            for (var j = 0; j < demo_prev_round_info[i].length; j++) {
+              let match = demo_all_data[demo_prev_round_info[i][j]];
+              if (match == null) continue;
+              previous_meetings.push(
+                <Grid item>
+                  <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                </Grid>
+              );
+            }
+            meeting_past.push(
+              <Grid item>
+                <Card className="roundStatusCard" variant="outlined">
+                <CardContent>
+                  <Typography variant="body2" component="p">
+                    <Grid container direction="row">
+                      {previous_meetings}
+                    </Grid>
+                  </Typography>
+                </CardContent>
+                </Card>
+              </Grid>
+            );
+          }
+          meeting_future = [];
+          
+          for (var i = 0; i < 3; i++) { 
+            if (this.state.rounds_completed == 6) break;
+            if (this.state.rounds_completed == 5 && (i == 0 || i == 1)) continue;
+            let future_meetings = [];
+            for (var j = 0; j < demo_round_info[1][i].length; j++) {
+                let match = demo_all_data[demo_round_info[1][i][j]];
+                future_meetings.push(
+                <Grid item>
+                <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                </Grid>
+                );
+            }
+            meeting_future.push(
+              <Grid item>
+                <Card className="roundStatusCard" variant="outlined">
+                <CardContent>
+                  <Typography variant="body2" component="p">
+                    <Grid container direction="row">
+                    {future_meetings}
+                    </Grid>
+                  </Typography>
+                </CardContent>
+                </Card>
+              </Grid>
+            );
+          }
+          demo_frame_count = this.state.rounds_completed;
+      }
+    }
     const CenteredGrid = ({rCompleted, rRemaining}) => (
       <div>
 
@@ -183,6 +463,16 @@ class App extends React.Component {
                 <br />
                 Rounds Remaining: {rRemaining}
               </Typography>
+              <Switch
+                checked={this.state.demo}
+                onChange={() => { this.setState({
+                  demo: !this.state.demo, 
+                  new_member_data: demo_new_member_data, 
+                  ext_member_data: demo_ext_member_data})}}
+                color="primary"
+                name="demoMode"
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
             </CardContent>
           </Grid>
           <Grid item xs={3} component={Card} className={useStyles().memberStatusCard} variant="outlined">
@@ -222,7 +512,7 @@ class App extends React.Component {
         </Grid>
 
         <Grid container spacing={2} direction="row" justify="center" alignItems="stretch">
-          <Grid container item xs={2} spacing={1} direction="column" justify="center" alignItems="flex-end">
+          <Grid container item xs={4} spacing={1} direction="column" justify="flex-start" alignItems="flex-end">
             {meeting_past}
           </Grid>
           <Card className="roundStatusCard" variant="outlined">
@@ -232,7 +522,7 @@ class App extends React.Component {
               </Grid>
             </CardContent>
           </Card>
-          <Grid container item xs={2} spacing={1} direction="column" justify="center" alignItems="flex-start">
+          <Grid container item xs={4} spacing={1} direction="column" justify="flex-end" alignItems="flex-start">
             {meeting_future}
           </Grid>
         </Grid> 
