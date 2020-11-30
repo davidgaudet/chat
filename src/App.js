@@ -19,6 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
+import Link from '@material-ui/core/Link';
 
 let newMemberCount = 0;
 let extMemberCount = 0;
@@ -26,17 +27,18 @@ let extMemberCount = 0;
 let demo_frame_count = 0;
 let demo_prev_round_info = [[], [], []];
 let demo_round_info = [
-  [[2, 3, 4, 1], 
+  [[2, 3, 4, 1],
    [3, 4, 2, 0]],
   [[3, 5, 4, 1],
    [4, 2, 5, 0],
    [2, 0, 1, 3, 4]],
 ];
 let demo_all_data = [{
-  first:"Sample",
+  first:"Puppy 1",
   last:"User",
+  email:"User@email.com",
   role:"Intern",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
   dateJoined: "date",
   currentMatch: 0,
@@ -45,8 +47,9 @@ let demo_all_data = [{
 {
   first:"Puppy 2",
   last:"User",
+  email:"User1@email.com",
   role:"Intern",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://www.firstforwomen.com/wp-content/uploads/sites/2/2019/07/puppy-eyes.jpg?resize=715,536",
   dateJoined: "date",
   currentMatch: 0,
@@ -55,8 +58,9 @@ let demo_all_data = [{
 {
   first:"Boss",
   last:"User",
+  email:"User2@email.com",
   role:"Manager",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop",
   dateJoined: "date",
   currentMatch: 0,
@@ -65,7 +69,8 @@ let demo_all_data = [{
 {
   first:"Cat",
   role:"Manager",
-  forms:"",
+  email:"User3@email.com",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697",
   dateJoined: "date",
   currentMatch: 0,
@@ -74,51 +79,47 @@ let demo_all_data = [{
 {
   first:"Tan cat",
   last:"User",
+  email:"User4@email.com",
   role:"Manager",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://www.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.ngsversion.1526587209178.adapt.1900.1.jpg",
   dateJoined: "date",
   currentMatch: 0,
   id: 4
-},
-{
-  first:"Puppy 3",
-  last:"User",
-  role:"Intern",
-  forms:"",
-  pic:"https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half/public/field_blog_entry_images/2018-03/puppy-tips.jpg?itok=dp_MoapS",
-  dateJoined: "date",
-  currentMatch: 0,
-  id: 5
 }];
 
 let demo_new_member_data = [{
-  first:"Sample",
+  first:"Puppy 1",
   last:"User",
+  email:"User@email.com",
   role:"Intern",
   forms:"",
   pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
   dateJoined: "date",
   currentMatch: 0,
-  id: 0
+  id: 0,
+  matchList: [2,3,4,1]
 },
 {
   first:"Puppy 2",
   last:"User",
+  email:"User1@email.com",
   role:"Intern",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://www.firstforwomen.com/wp-content/uploads/sites/2/2019/07/puppy-eyes.jpg?resize=715,536",
   dateJoined: "date",
   currentMatch: 0,
-  id: 1
+  id: 1,
+  matchList: [3,4,2,0]
 }];
 
 let demo_ext_member_data = [
   {
   first:"Boss",
   last:"User",
+  email:"User2@email.com",
   role:"Manager",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop",
   dateJoined: "date",
   currentMatch: 0,
@@ -127,8 +128,9 @@ let demo_ext_member_data = [
 {
   first:"Cat",
   last:"User",
+  email:"User3@email.com",
   role:"Manager",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697",
   dateJoined: "date",
   currentMatch: 0,
@@ -137,8 +139,9 @@ let demo_ext_member_data = [
 {
   first:"Tan cat",
   last:"User",
+  email:"User4@email.com",
   role:"Manager",
-  forms:"",
+  forms:"https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8",
   pic:"https://www.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.ngsversion.1526587209178.adapt.1900.1.jpg",
   dateJoined: "date",
   currentMatch: 0,
@@ -146,7 +149,7 @@ let demo_ext_member_data = [
 }];
 
 class App extends React.Component {
-  
+
 
   constructor(props) {
     super(props)
@@ -166,7 +169,8 @@ class App extends React.Component {
         pic:"https://i.pinimg.com/736x/ae/c4/53/aec453161b2f33ffc6219d8a758307a9.jpg",
         dateJoined: "date",
         currentMatch: 0,
-        id: 0
+        id: 0,
+        matchList: []
       }],
       ext_member_data: [{
         first:"Boss",
@@ -188,17 +192,19 @@ class App extends React.Component {
 
 
   render() {
-    function MeeterModal({name, pic, matchName, matchPic}) {
+    function MeeterModal({name, pic, email, role, matchName, matchPic, matchEmail, matchRole, popUp}) {
       const classes = useStyles();
       // getModalStyle is not a pure function, we roll the style only on the first render
       const [modalStyle] = React.useState(getModalStyle);
       const [open, setOpen] = React.useState(false);
 
       const handleOpen = () => {
+        if(!popUp)
         setOpen(true);
       };
 
       const handleClose = () => {
+          if(!popUp)
         setOpen(false);
       };
 
@@ -214,8 +220,13 @@ class App extends React.Component {
             <Avatar alt={matchName} src={matchPic} className={classes.large} height="1000"></Avatar>
           </AvatarGroup>
           <p>
-            {name} + {matchName}
+            {name} ({role}) + {matchName} ({matchRole})
           </p>
+          <a target="_blank" href="https://docs.google.com/forms/d/14Kt4TJWxoWov_SyW1hs74qOzm9mxeOlUOnuX8tOFgvg/edit#response=ACYDBNhRatw8OGnceLGnqmnD9RIPUHYoPdUGg5blnTlslcWxVWKnEoUk4MhiGbmJbQCxpH8">Google Form Data</a>
+          <h4>Emails</h4>
+          <a href={"mailto: " + email}>{name}'s email: {email}</a>
+          <br></br>
+          <a href={"mailto: " + matchEmail}>{matchName}'s email: {matchEmail}</a>
         </div>
       );
 
@@ -246,7 +257,7 @@ class App extends React.Component {
     if (this.state.demo && this.state.new_member_data.length == 3) {
       this.state.new_member_data[2].pic = "https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half/public/field_blog_entry_images/2018-03/puppy-tips.jpg?itok=dp_MoapS";
     }
-    
+
     if (!this.state.demo) this.state.rounds_remaining = this.state.new_members.length + this.state.ext_members.length - (1 + this.state.rounds_completed);
     else if (this.state.rounds_completed == 1) this.state.rounds_remaining = 3;
     var meeting_past = [];
@@ -264,10 +275,28 @@ class App extends React.Component {
         remainingCircleString += " O   ";
       }
       let matchee = this.state.new_member_data[i];
-      let match = this.state.ext_member_data[matchee.currentMatch];
+      let match;
+      if (this.state.demo)
+      {
+            //current # completed
+            let idx = this.state.rounds_completed;
+            //if we are done w matching meetings, just make it the last person in the list
+            if(idx >= matchee.matchList.length)
+            {
+              idx = matchee.matchList.length -1 ;
+            }
+            //get the person we are matching w based on this round #
+            idx = matchee.matchList[idx];
+            //set the match
+            match = demo_all_data[idx];
+
+      }
+      else{
+        match = this.state.ext_member_data[this.state.rounds_completed];
+      }
       console.log(match);
       new_avatars.push(
-        <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
+        <MeeterModal name={matchee.first} pic={matchee.pic} email={matchee.email} role={matchee.role} matchName={match.first} matchPic={match.pic} matchEmail={match.email} matchRole={match.role}/>
       );
 
       if (this.state.rounds_completed != 0) {
@@ -288,7 +317,7 @@ class App extends React.Component {
       meetingMembers.push(
         <Grid item>
         <div style={{ paddingTop: avatar_padding }}>
-        <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
+                <MeeterModal name={matchee.first} pic={matchee.pic} email={matchee.email} role={matchee.role} matchName={match.first} matchPic={match.pic} matchEmail={match.email} matchRole={match.role}/>
         </div>
         </Grid>
       );
@@ -313,10 +342,10 @@ class App extends React.Component {
       let matchee = this.state.ext_member_data[i];
       let match = this.state.new_member_data[matchee.currentMatch];
       ext_avatars.push(
-            <MeeterModal name={matchee.first} pic={matchee.pic} matchName={match.first} matchPic={match.pic} />
+                  <MeeterModal name={matchee.first} pic={matchee.pic} email={matchee.email} role={matchee.role} matchName={match.first} matchPic={match.pic} matchEmail={match.email} matchRole={match.role} popUp={true}/>
       );
     }
-    
+
     if (this.state.demo) {
       if (this.state.new_member_data.length == 2) {
           meeting_future = [];
@@ -326,14 +355,16 @@ class App extends React.Component {
               demo_prev_round_info[i].push(demo_round_info[0][i].shift());
             }
 
-            
+
             for (var i = 0; i < 2; i++) {
+              let matchee = this.state.new_member_data[i];
               let previous_meetings = [];
               for (var j = 0; j < demo_prev_round_info[i].length; j++) {
                 let match = demo_all_data[demo_prev_round_info[i][j]];
+                let matchee = demo_all_data[match.currentMatch];
                 previous_meetings.push(
                   <Grid item>
-                    <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                        <MeeterModal name={match.first} pic={match.pic} email={match.email} role={match.role} matchName={matchee.first} matchPic={matchee.pic} matchEmail={matchee.email} matchRole={matchee.role}/>
                   </Grid>
                 );
               }
@@ -356,14 +387,15 @@ class App extends React.Component {
             meeting_past = [];
             meeting_future = [];
           }
-          
-          for (var i = 0; i < 2; i++) { 
+
+          for (var i = 0; i < 2; i++) {
+            let matchee = this.state.new_member_data[i];
             let future_meetings = [];
             for (var j = 0; j < demo_round_info[0][i].length; j++) {
                 let match = demo_all_data[demo_round_info[0][i][j]];
                 future_meetings.push(
                 <Grid item>
-                  <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                <MeeterModal name={match.first} pic={match.pic} email={match.email} role={match.role} matchName={matchee.first} matchPic={matchee.pic} matchEmail={matchee.email} matchRole={matchee.role}/>
                 </Grid>
                 );
             }
@@ -392,7 +424,7 @@ class App extends React.Component {
             for (var i = 0; i < 3; i++) {
               demo_prev_round_info[i].push(demo_round_info[1][i].shift());
             }
-          } 
+          }
 
           for (var i = 0; i < 3; i++) {
             if (i == 2 && this.state.rounds_completed == 1) continue;
@@ -421,8 +453,8 @@ class App extends React.Component {
             );
           }
           meeting_future = [];
-          
-          for (var i = 0; i < 3; i++) { 
+
+          for (var i = 0; i < 3; i++) {
             if (this.state.rounds_completed == 6) break;
             if (this.state.rounds_completed == 5 && (i == 0 || i == 1)) continue;
             let future_meetings = [];
@@ -455,7 +487,7 @@ class App extends React.Component {
       <div>
 
         <Grid container justify="space-evenly" alignItems="stretch" style={{padding: '24px'}}>
-          
+
           <Grid item xs={3} component={Card} className={useStyles().roundStatusCard} variant="outlined">
             <CardContent>
               <Typography variant="body2" component="p">
@@ -466,8 +498,8 @@ class App extends React.Component {
               <Switch
                 checked={this.state.demo}
                 onChange={() => { this.setState({
-                  demo: !this.state.demo, 
-                  new_member_data: demo_new_member_data, 
+                  demo: !this.state.demo,
+                  new_member_data: demo_new_member_data,
                   ext_member_data: demo_ext_member_data})}}
                 color="primary"
                 name="demoMode"
@@ -525,17 +557,17 @@ class App extends React.Component {
           <Grid container item xs={4} spacing={1} direction="column" justify="flex-end" alignItems="flex-start">
             {meeting_future}
           </Grid>
-        </Grid> 
+        </Grid>
 
         <Grid container item justify="center" alignItems="center">
           <Grid item>
-            { this.state.active_round == false && 
+            { this.state.active_round == false &&
               <Button onClick={() => { this.setState({active_round: !this.state.active_round})}}
                 variant="outlined" style={{backgroundColor: "#82E0AA", margin: "20px"}} >
                 Start Round
               </Button>
             }
-            { this.state.active_round == true && 
+            { this.state.active_round == true &&
               <Button onClick={() => { this.setState({active_round: !this.state.active_round, rounds_completed: rCompleted+1})}}
                 variant="outlined" style={{backgroundColor: "#f5d36e", margin: "20px"}} >
                 Finish Round
@@ -569,6 +601,7 @@ class App extends React.Component {
         <form className={classes.root} noValidate autoComplete="off">
           <TextField required id="standard-required" className="new-member-first" label="Required" helperText="First Name" placeholder="First Name"/>
           <TextField required  id="standard-required" className="new-member-last" label="Required" helperText="Last Name" placeholder="Last Name"/>
+        <TextField required  id="standard-required" className="new-member-email" label="Required" helperText="Email" placeholder="Email"/>
           <TextField className="new-member-role" id="standard-basic" label="" helperText="Team Role"   placeholder="Team Role"/>
           <TextField
           className="new-member-forms"
@@ -606,6 +639,7 @@ class App extends React.Component {
         <form className={classes.root} noValidate autoComplete="off">
           <TextField required id="standard-required" className="new-member-first" label="Required" helperText="First Name" placeholder="First Name"/>
           <TextField required  id="standard-required" className="new-member-last" label="Required" helperText="Last Name" placeholder="Last Name"/>
+          <TextField required  id="standard-required" className="new-member-email" label="Required" helperText="Email" placeholder="Email"/>
           <TextField className="new-member-role" id="standard-basic" label="" helperText="Team Role"   placeholder="Team Role"/>
           <TextField
           className="new-member-forms"
@@ -675,11 +709,12 @@ class App extends React.Component {
 
       var first = document.querySelectorAll("#standard-required")[0].value;
       var lastN = document.querySelectorAll("#standard-required")[1].value;
+      var email = document.querySelectorAll("#standard-required")[2].value;
       var role = document.getElementById("standard-basic").value;
       var forms = document.querySelectorAll("#standard-full-width")[0].value;
       var pic = document.querySelectorAll("#standard-full-width")[1].value;
       var date = document.getElementById("date").value;
-      if(first.trim() != "" && lastN.trim() != ""){
+      if(first.trim() != "" && lastN.trim() != "" && email.trim() != ""){
        console.log(first, lastN, role, forms, pic, date);
        if(pic.trim() == ""){
          pic = "invalid";
@@ -687,6 +722,7 @@ class App extends React.Component {
        var newMemberToAdd = {
          "first":first,
          "last":lastN,
+         "email":email,
          "role":role,
          "forms":forms,
          "pic":pic,
@@ -711,6 +747,8 @@ class App extends React.Component {
               alert("First name required");
           else if(lastN.trim() == "")
                 alert("Last name required");
+          else if(email.trim() == "")
+                alert("Email required");
         }
 
     };
@@ -720,11 +758,12 @@ class App extends React.Component {
 
       var first = document.querySelectorAll("#standard-required")[0].value;
       var lastN = document.querySelectorAll("#standard-required")[1].value;
+      var email = document.querySelectorAll("#standard-required")[2].value;
       var role = document.getElementById("standard-basic").value;
       var forms = document.querySelectorAll("#standard-full-width")[0].value;
       var pic = document.querySelectorAll("#standard-full-width")[1].value;
       var date = document.getElementById("date").value;
-      if(first.trim() != "" && lastN.trim() != ""){
+      if(first.trim() != "" && lastN.trim() != ""&& email.trim() != ""){
        console.log(first, lastN, role, forms, pic, date);
        if(pic.trim() == ""){
          pic = "invalid";
@@ -732,6 +771,7 @@ class App extends React.Component {
        var existingMemberToAdd = {
          "first":first,
          "last":lastN,
+         "email":email,
          "role":role,
          "forms":forms,
          "pic":pic,
@@ -756,6 +796,8 @@ class App extends React.Component {
               alert("First name required");
           else if(lastN.trim() == "")
                 alert("Last name required");
+          else if(email.trim() == "")
+                  alert("Email required");
         }
 
     };
