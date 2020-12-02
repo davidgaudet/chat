@@ -87,6 +87,16 @@ let demo_all_data = [{
   dateJoined: "date",
   currentMatch: 0,
   id: 4
+},
+{
+  first:"Puppy 3",
+  last:"User",
+  role:"Intern",
+  forms:"",
+  pic:"https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half/public/field_blog_entry_images/2018-03/puppy-tips.jpg?itok=dp_MoapS",
+  dateJoined: "date",
+  currentMatch: 0,
+  id: 5
 }];
 
 let demo_new_member_data = [{
@@ -293,7 +303,7 @@ class App extends React.Component {
 
       }
       else{
-        match = this.state.ext_member_data[this.state.rounds_completed];
+        match = this.state.ext_member_data[0];
       }
       console.log(match);
       new_avatars.push(
@@ -461,11 +471,14 @@ class App extends React.Component {
             let future_meetings = [];
             for (var j = 0; j < demo_round_info[1][i].length; j++) {
                 let match = demo_all_data[demo_round_info[1][i][j]];
+                if(match!= null)
+                {
                 future_meetings.push(
                 <Grid item>
                 <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
                 </Grid>
                 );
+              }
             }
             meeting_future.push(
               <Grid item>
@@ -618,7 +631,7 @@ class App extends React.Component {
         </div>
 
       </button>
-        <p>Generate Icebreaker</p> 
+        <p>Generate Icebreaker</p>
 
       <Popper id={id} open={open} anchorEl={anchorEl}>
         <div className={classes.paper2}>{listOfIB[ran]}</div>
@@ -774,7 +787,8 @@ class App extends React.Component {
          "pic":pic,
          "dateJoined": date,
          "currentMatch": 0,
-         "id": this.state.new_members.length-1
+         "id": this.state.new_members.length-1,
+         "matchList": [3,4,2,0]
        };
        let newMembers = this.state.new_members;
          let last = newMembers[newMembers.length-1];
