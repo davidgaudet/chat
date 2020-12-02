@@ -270,7 +270,12 @@ class App extends React.Component {
     }
 
     if (!this.state.demo) this.state.rounds_remaining = this.state.new_members.length + this.state.ext_members.length - (1 + this.state.rounds_completed);
-    else if (this.state.rounds_completed == 1) this.state.rounds_remaining = 3;
+    else if (this.state.rounds_completed == 1)
+    {
+        console.log("completed 1 round");
+        this.state.rounds_remaining = 3;
+    }
+
     var meeting_past = [];
     var meetingMembers = [];
     var meeting_future = [];
@@ -442,10 +447,11 @@ class App extends React.Component {
             let previous_meetings = [];
             for (var j = 0; j < demo_prev_round_info[i].length; j++) {
               let match = demo_all_data[demo_prev_round_info[i][j]];
+              let matchee = this.state.new_member_data[i];
               if (match == null) continue;
               previous_meetings.push(
                 <Grid item>
-                  <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                  <MeeterModal name={match.first} pic={match.pic} matchName={matchee.first} matchPic={matchee.pic} />
                 </Grid>
               );
             }
@@ -471,11 +477,12 @@ class App extends React.Component {
             let future_meetings = [];
             for (var j = 0; j < demo_round_info[1][i].length; j++) {
                 let match = demo_all_data[demo_round_info[1][i][j]];
+                  let matchee = this.state.new_member_data[i];
                 if(match!= null)
                 {
                 future_meetings.push(
                 <Grid item>
-                <MeeterModal name={match.first} pic={match.pic} matchName={match.first} matchPic={match.pic} />
+                <MeeterModal name={match.first} pic={match.pic} matchName={matchee.first} matchPic={matchee.pic} />
                 </Grid>
                 );
               }
@@ -809,6 +816,17 @@ class App extends React.Component {
                 alert("Last name required");
           else if(email.trim() == "")
                 alert("Email required");
+        }
+
+        if(this.state.demo && this.state.rounds_completed == 1)
+        {
+          let memberDataDemo = this.state.new_member_data;
+
+          memberDataDemo[0].matchList = [2,3,5,4,1];
+          memberDataDemo[1].matchList = [3,4,2,5,0];
+          memberDataDemo[2].matchList = [0,2,0,1,3,4];
+
+          this.setState({new_member_data: memberDataDemo});
         }
 
     };
