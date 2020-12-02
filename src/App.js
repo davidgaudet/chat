@@ -21,6 +21,7 @@ import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import Link from '@material-ui/core/Link';
 import Popper from '@material-ui/core/Popper';
+import Tooltip from '@material-ui/core/Tooltip';
 
 let newMemberCount = 0;
 let extMemberCount = 0;
@@ -243,9 +244,11 @@ class App extends React.Component {
 
       return (
         <div style={{paddingLeft: 2, paddingRight: 2}}>
+          <Tooltip title={name}>
           <Fab size="small" onClick={() => {handleOpen();}}>
             <Avatar alt={name} src={pic}></Avatar>
           </Fab>
+          </Tooltip>
           <Modal
             open={open}
             onClose={handleClose}
