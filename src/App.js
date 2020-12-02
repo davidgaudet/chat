@@ -20,6 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import Link from '@material-ui/core/Link';
+import Popper from '@material-ui/core/Popper';
 
 let newMemberCount = 0;
 let extMemberCount = 0;
@@ -575,6 +576,7 @@ class App extends React.Component {
             }
           </Grid>
         </Grid>
+          <SimplePopper/>
 
       </div>
     );
@@ -582,6 +584,48 @@ class App extends React.Component {
     function rand() {
       return Math.round(Math.random() * 20) - 10;
     }
+
+    function SimplePopper() {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  var ran = Math.floor(Math.random() * 8);;
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+
+  let listOfIB = [
+    "Are there any interesting things your name spells with the letters rearranged?",
+    "If you were a potato, what way would you like to be cooked?",
+    "Would you go to space if you knew that you could never come back to earth?",
+    "Have you ever been mistaken for someone famous?",
+    "What animal would you chose to be?",
+    "What is the most embarrassing thing you’ve ever done?",
+    "What is the strangest gift you have ever received?",
+    "What kind of reality show would you appear in?",
+    "Which of Snow White’s seven dwarfs describes you best (Bashful, Doc, Dopey, Grumpy, Happy, Sleepy or Sneezy)?"
+  ];
+
+  return (
+    <div>
+      <button aria-describedby={id} type="button" onClick={handleClick}>
+         <div>
+        <Avatar src="https://static.thenounproject.com/png/2554637-200.png"></Avatar>
+        </div>
+
+      </button>
+        <p>Generate Icebreaker</p> 
+
+      <Popper id={id} open={open} anchorEl={anchorEl}>
+        <div className={classes.paper2}>{listOfIB[ran]}</div>
+      </Popper>
+    </div>
+  );
+}
 
     function getModalStyle() {
       const top = 50 + rand();
@@ -665,7 +709,9 @@ class App extends React.Component {
                   shrink: true,
                 }}
               />
+
         </form>
+
 
       );
     }
@@ -945,7 +991,12 @@ const useStyles = makeStyles((theme) => ({
  large: {
    width: theme.spacing(15),
    height: theme.spacing(15),
- }
+ },
+ paper2: {
+    border: '1px solid',
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+  }
 }));
 
 
